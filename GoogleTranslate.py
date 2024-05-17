@@ -7,7 +7,7 @@ import dotenv
 class GoogleTranslate:
     def __init__(self):
         keys = dotenv.dotenv_values("keys.env")
-        self.translate_api_key = keys["TRANSLATE_API_KEY"]
+        self.translate_api_key = keys["GOOGLE_TRANSLATE_API_KEY"]
 
     def translate(self,text, source_language, target_language) -> List[str] | str  | str:
         translations = requests.post(

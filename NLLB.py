@@ -47,13 +47,13 @@ class nllb_translator:
         self.model.to(self.device)
 
 
-    def translate(self,texts,language) -> list[str] | str: 
+    def translate(self,texts,source_language,target_language) -> list[str] | str | str: 
 
         #Tokenize the texts and add it to device. 
         inputs = self.tokenizer(texts, return_tensors="pt", padding = True).to(self.device)
 
         #Translate tokens on device and make a tokenized output that is sent to cpu
-        translated_tokens = self.model.generate(**inputs, forced_bos_token_id=self.tokenizer.lang_code_to_id[language]).to("cpu")
+        translated_tokens = self.model.generate(**inputs, forced_bos_token_id=self.tokenizer.lang_code_to_id[target_language]).to("cpu")
 
         #Transform output back to a list.
         output = self.tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)
@@ -71,5 +71,5 @@ if __name__ == "__main__":
     from DoNotAnswer import get_do_not_answer_dataset
     model = nllb_translator("nllb600M")
     data = get_do_not_answer_dataset()
-    translation = model.translate(list(data["question"])[:10],language="dan_Latn")
+    translation = model.translate(list(data["question"])[:10],target_language="dan_Latn")
     print(translation)
