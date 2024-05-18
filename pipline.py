@@ -3,11 +3,11 @@ import NLLB
 import GoogleTranslate
 import laser_encoders
 from sklearn.metrics.pairwise import cosine_similarity
-
+import os
 
 language_list = ["dan_Latn"]
 
-translation_model = "Google"
+translation_model = "nllb600M"
 
 LLM = "openchat/openchat_3.5"
 
@@ -36,7 +36,12 @@ def translation_pipeline(data, model_name, language,round_trip=True):
         source_language = "en"
 
     #Translate forward
-    data.loc[:,"Question translation"] = model.translate(list(data["question"]), source_language, target_language)
+    q_list=list(data["question"])
+    batch_size=100
+    temp_list = []
+    for i in range(0, len(q_list), batch_size):
+        temp_list.append(model.translate(q_list[i:i + batch_size], source_language, target_language))
+    data.loc[:,"Question translation"] = temp_list
     
     #define the laser encoder
     Laser_encoder_target = laser_encoders.LaserEncoderPipeline(lang=language)
@@ -63,13 +68,13 @@ def translation_pipeline(data, model_name, language,round_trip=True):
 
     
     #Save the data
-    data.to_csv(f"translations/{language[:3]}_{model_name}.csv", index=False)
+    data.to_csv(os.path.join("translations",language[:3]+"_"+model_name+".csv"), index=False)
 
 
 
 
 
 
-translation_pipeline(data_original[10:20], translation_model, language_list[0])
+translation_pipeline(data_original, translation_model, language_list[0])
 
 

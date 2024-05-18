@@ -1,11 +1,12 @@
 from typing import List
 import requests
-import dotenv
+
 
 
 
 class GoogleTranslate:
     def __init__(self):
+        import dotenv
         keys = dotenv.dotenv_values("keys.env")
         self.translate_api_key = keys["GOOGLE_TRANSLATE_API_KEY"]
 

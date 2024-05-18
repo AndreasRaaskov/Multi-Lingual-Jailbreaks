@@ -3,10 +3,15 @@ Script for getting the do-not-answer dataset
 """
 
 
-from datasets import load_dataset
+
 import pandas as pd
+import os
 
 def download_do_not_answer_dataset():
+
+    #Import packeage
+    from datasets import load_dataset
+
     #Load the dataset
     dataset = load_dataset("LibrAI/do-not-answer")
 
@@ -19,7 +24,7 @@ def download_do_not_answer_dataset():
     #Only keep the columns we need
     df = df[['id', 'risk_area', 'types_of_harm', 'specific_harms', 'question']]
 
-    df.to_csv("datasets/do_not_answer_dataset.csv", index=False)
+    df.to_csv(os.path.join("datasets","do_not_answer_dataset.csv"), index=False)
 
 
 
@@ -27,10 +32,10 @@ def download_do_not_answer_dataset():
 def get_do_not_answer_dataset():
     #Check if the file exists
     try:
-        df = pd.read_csv("datasets/do_not_answer_dataset.csv")
+        df = pd.read_csv(os.path.join("datasets","do_not_answer_dataset.csv"))
     except:
         download_do_not_answer_dataset()
-        df = pd.read_csv("datasets/do_not_answer_dataset.csv")
+        df = pd.read_csv(os.path.join("datasets","do_not_answer_dataset.csv"))
 
     return df
 

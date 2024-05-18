@@ -6,6 +6,7 @@ pandas
 torch
 transliterate
 laser_encoders
-llama-cpp-python
+#llama-cpp-python
 openai
-dotenv
+datasets
+#dotenv

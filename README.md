@@ -9,6 +9,10 @@ python3.10 -m venv env
 
 .\env\Scripts\activate
 
+or for linux
+
+source ./env/bin/activate
+
 pip install -r requirements.txt
 
 note python 3.11 results in an error in the fairseq package that may be fixed in the future.
