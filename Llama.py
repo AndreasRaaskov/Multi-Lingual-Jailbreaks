@@ -3,34 +3,50 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import numpy as np
 
-def GPT_answer(message: str, model_name="openchat/openchat_3.5") -> tuple:
-    # Load tokenizer and model
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    print("Tokenizer loaded")
-    model = AutoModelForCausalLM.from_pretrained(model_name)
-    print("Model loaded")
-    model.eval()
+class AutoModel():
+    def __init__(self, model_name):
+        self.model_name = model_name
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.model = AutoModelForCausalLM.from_pretrained(model_name)
+        self.model.eval()
 
-    # Encode the input prompt
-    inputs = tokenizer.encode(message, return_tensors='pt')
+    def answer(self,message: str) -> tuple:
+        # Load tokenizer and model
 
-    # Generate response using the model with log probability calculation
-    with torch.no_grad():
-        outputs = model(inputs, labels=inputs)
-        loss = outputs.loss
-        log_probs = outputs.logits.log_softmax(dim=-1)
-        predictions = torch.argmax(log_probs, dim=-1)
+        # Encode the input prompt
+        inputs = self.tokenizer.encode(message, return_tensors='pt')
 
-    # Convert token ids to tokens
-    tokens = tokenizer.convert_ids_to_tokens(predictions[0].tolist())
+        # Generate response using the model with log probability calculation
+        with torch.no_grad():
+            outputs = self.model.generate(inputs, max_length=50,output_logits=True,low_memory = True, return_dict_in_generate=True)
 
-    # Extract log probabilities for the predicted tokens
-    log_probs = log_probs.gather(2, predictions.unsqueeze(-1)).squeeze(-1)[0].tolist()
 
-    # Perplexity calculation
-    perplexity = np.exp(-np.mean(log_probs))
+        log_probs = []
+        ids = []
+        for logits in outputs.logits:
+            # Calculate log probabilities
+            log_probs.append(torch.max(torch.nn.functional.log_softmax(logits, dim=1)).item())
+            ids.append(torch.argmax(logits, dim=1).item())
+        
+        
 
-    return tokens, perplexity, log_probs
+        # Convert token ids to tokens
+        tokens = self.tokenizer.convert_ids_to_tokens(ids)
+        answer = self.tokenizer.decode(ids)
+
+        # Collect the probabilities
+        probs = []
+        for token, p in zip(tokens, np.exp(log_probs)):
+            probs.append((token, p))
+
+        # Perplexity calculation
+        perplexity = np.exp(-np.mean(log_probs))
+
+        return answer, perplexity, probs
 
 if __name__ == "__main__":
-    print(GPT_answer("What is the meaning of life"))
+    #Test the model Llama 7B
+    model = AutoModel("EleutherAI/gpt-neo-2.7B")
+    print("Model loaded")
+    message = "What is the capital of France?"
+    print(model.answer(message))

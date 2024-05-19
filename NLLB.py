@@ -63,6 +63,9 @@ class nllb_translator:
         #Translate tokens on device and make a tokenized output that is sent to cpu
         translated_tokens = self.model.generate(**inputs, forced_bos_token_id=self.tokenizer.lang_code_to_id[target_language]).to("cpu")
 
+        #delete inputs
+        del inputs
+
         #Transform output back to a list.
         output = self.tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)
 
@@ -73,11 +76,11 @@ class nllb_translator:
 
 if __name__ == "__main__":
     # Load to models
-    model_list = ["facebook/nllb-200-distilled-600M", "facebook/nllb-200-distilled-1.3B", "facebook/nllb-200-3.3B"]
+    model_list = ["facebook/nllb-200-3.3B"]# ["facebook/nllb-200-distilled-600M", "facebook/nllb-200-distilled-1.3B", "facebook/nllb-200-3.3B"]
     download_nllb(model_list)
 
-    from DoNotAnswer import get_do_not_answer_dataset
-    model = nllb_translator("nllb600M")
-    data = get_do_not_answer_dataset()
-    translation = model.translate(list(data["question"])[:10],None,target_language="dan_Latn")
-    print(translation)
+    #from DoNotAnswer import get_do_not_answer_dataset
+    #model = nllb_translator("nllb1.3B")
+    #data = get_do_not_answer_dataset()
+    #translation = model.translate(list(data["question"])[:10],None,target_language="dan_Latn")
+    #print(translation)
