@@ -4,7 +4,7 @@ import dotenv
 import numpy as np
 
 MODEL_ID = "gpt-3.5-turbo-0301"
-#MODEL_ID = "gpt-4-0613"
+MODEL_ID = "gpt-4-0613"
 
 keys = dotenv.dotenv_values("keys.env")
 openai.api_key = keys["OPENAI_API_KEY"]
@@ -21,8 +21,8 @@ class GPT:
         output=openai.chat.completions.create(
                 model=self.MODEL_ID, messages=[{"role": "user", "content": message}],
                 logprobs=True,
-                temperature=0.0
-
+                temperature=0.0,
+                max_tokens=200
             )
         tokens = []
         logprobs = []

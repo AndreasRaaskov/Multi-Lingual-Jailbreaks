@@ -8,17 +8,17 @@ import pandas as pd
 import ChatGPT
 
 # Danish Hindi and Vietnamese 
-language_list = ["hin_Deva"]#  ["vie_Latn","hin_Deva","dan_Latn"]
+language_list = ["hin_Deva","vie_Latn"] #,"ban_Latn","dan_latn"]
 
-translation_model = "nllb600M"
+translation_model = "Google"
 
-LLM = "gpt-3.5-turbo-0301"
+LLM = "gpt-4-turbo-2024-04-09"
 
 # Get the do not answer dataset
-data_original = get_do_not_answer_dataset()[:5]
+data_original = get_do_not_answer_dataset()
 
 
-def translation_pipeline(data, model_name, language,round_trip=True):
+def translation_pipeline(data, model_name, language,round_trip=True,cut_off=0):
     #Translate the questions
 
     #Copy the data
@@ -40,7 +40,7 @@ def translation_pipeline(data, model_name, language,round_trip=True):
 
     #Translate forward
     q_list=list(data["question"])
-    batch_size=100
+    batch_size=5
     temp_list = []
     for i in range(0, len(q_list), batch_size):
         temp_list.extend(model.translate(q_list[i:i + batch_size], source_language, target_language))
@@ -73,46 +73,49 @@ def translation_pipeline(data, model_name, language,round_trip=True):
         #Calculate the cosine similarity
         data.loc[:,"cosine back"] = [cosine_similarity(Orignale_embeddings[i].reshape(1, -1), Tanslated_back_embeddings[i].reshape(1, -1))[0][0] for i in range(len(Orignale_embeddings))]
 
+        keep = data.loc[(data["cosine back"] > cut_off)].index
+        data = data.loc[keep,:]
+
     
     #Save the data
     data.to_csv(os.path.join("translations",language[:3]+"_"+model_name+".csv"), index=False)
 
 
-def answer_pipeline(LLM_name,languages,translation_model):
-    for language in languages:
+def answer_pipeline(LLM_name,language,translation_model):
 
-        #Load the data
-        data = pd.read_csv(os.path.join("translations",language[:3]+"_"+translation_model+".csv")).loc[:,["id","question translation"]]
-        
-        # Define the model
-        if LLM_name[:3] == "gpt":
-            model = ChatGPT.GPT(LLM_name)
-        elif LLM_name[:3] == "ope":
-            pass #Not implemented
-        elif LLM_name[:3] == "Lla":
-            pass #Not implemented
-        else:
-            raise ValueError("Model name not recognized")
-        
 
-        #Loop through the questions and get the answers
-        q_list=list(data["question translation"])
-        answers = []
-        perplexities = []
-        probs = []
-        
-        for q in q_list:
-            answer, perplexity, prob = model.answer(q)
-            answers.append(answer)
-            perplexities.append(perplexity)
-            probs.append(prob)
-        
-        data.loc[:,"answers"] = answers
-        data.loc[:,"perplexity"] = perplexities
-        data.loc[:,"probs"] = probs
+    #Load the data
+    data = pd.read_csv(os.path.join("translations",language[:3]+"_"+translation_model+".csv")).loc[:,["id","question translation"]]
+    
+    # Define the model
+    if LLM_name[:3] == "gpt":
+        model = ChatGPT.GPT(LLM_name)
+    elif LLM_name[:3] == "ope":
+        pass #Not implemented
+    elif LLM_name[:3] == "Lla":
+        pass #Not implemented
+    else:
+        raise ValueError("Model name not recognized")
+    
 
-        #Save the data
-        data.to_csv(os.path.join("Results",language[:3]+"_"+LLM_name+"_"+translation_model+".csv"), index=False)
+    #Loop through the questions and get the answers
+    q_list=list(data["question translation"])
+    answers = []
+    perplexities = []
+    probs = []
+    
+    for q in q_list:
+        answer, perplexity, prob = model.answer(q)
+        answers.append(answer)
+        perplexities.append(perplexity)
+        probs.append(prob)
+    
+    data.loc[:,"answers"] = answers
+    data.loc[:,"perplexity"] = perplexities
+    data.loc[:,"probs"] = probs
+
+    #Save the data
+    data.to_csv(os.path.join("Results",language[:3]+"_"+LLM_name+"_"+translation_model+".csv"), index=False)
     
 def evaluate(LLM_name,language,translation_model_name,evlauationLLM):
     # a function that evaluates the results using an LLM
@@ -152,7 +155,7 @@ def evaluate(LLM_name,language,translation_model_name,evlauationLLM):
 
     #Translate the answers back to english
     q_list=list(data_back["answers"])
-    batch_size=100
+    batch_size=5
     english_answer = []
     for i in range(0, len(q_list), batch_size):
         english_answer.extend(translation_model.translate(q_list[i:i + batch_size], target_language, source_language))
@@ -199,8 +202,10 @@ def evaluate(LLM_name,language,translation_model_name,evlauationLLM):
 
 
 if __name__ == "__main__":
-    translation_pipeline(data_original, translation_model, language_list[0])
-    answer_pipeline(LLM,language_list,translation_model)
-    evaluate(LLM,language_list[0],translation_model,"gpt-3.5-turbo-0301")
+    for language in language_list:
+        #translation_pipeline(data_original, translation_model, language,cut_off=0)
+        #answer_pipeline(LLM,language,translation_model)
+        evaluate(LLM,language,translation_model,"gpt-3.5-turbo-0301")
+
 
 
