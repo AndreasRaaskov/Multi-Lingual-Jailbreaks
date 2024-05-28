@@ -54,7 +54,7 @@ class nllb_translator:
         #Check if GPU is available
 
         # Set environment variable to make only GPU 1 visible to this script
-        os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+        os.environ["CUDA_VISIBLE_DEVICES"] = "2"
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
         #Load the model
@@ -82,9 +82,6 @@ class nllb_translator:
 
         #delete inputs
         del inputs
-
-            #delete inputs
-            del inputs
 
         #Transform output back to a list.
         output = self.tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)

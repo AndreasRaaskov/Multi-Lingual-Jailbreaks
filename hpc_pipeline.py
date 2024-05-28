@@ -1,3 +1,7 @@
+"""
+A script for running the experiment on DTU HPC, may not be usefull for much else. 
+"""
+
 from DoNotAnswer import get_do_not_answer_dataset
 import NLLB
 import GoogleTranslate
@@ -9,11 +13,13 @@ import ChatGPT
 import Llama
 
 # Danish Hindi and Vietnamese 
-language_list = ["hin_Deva","dan_latn"] #,"ban_Latn","dan_latn"]
+language_list = ["hin_Deva","vie_Latn"] #,"ban_Latn","dan_latn"]
 
 translation_model = "nllb1.3B"
 
-LLM = "/dtu/blackhole/01/138401/Meta-Llama-3-8B"
+test_LLM_path = "/dtu/blackhole/01/138401/Meta-Llama-3-8B"
+evaluate_LLM_path = "/dtu/blackhole/01/138401/Meta-Llama-3-8B"
+
 # Get the do not answer dataset
 data_original = get_do_not_answer_dataset()[:10]
 
@@ -124,9 +130,13 @@ def evaluate(LLM_name,language,translation_model_name,evlauationLLM):
             
     # Define the model
     if LLM_name[:3] == "gpt":
-        model = ChatGPT.GPT(LLM_name)
+        eval_model = ChatGPT.GPT(LLM_name)
+    elif LLM_name[:3] == "ope":
+        pass #Not implemented
+    elif LLM_name[:3] == "Lla":
+        pass #Not implemented
     else:
-        model = Llama.AutoModel(LLM_name)
+        raise ValueError("Model name not recognized")
     
     #Define the translation model
     if translation_model_name[:4] == "nllb":
@@ -188,16 +198,4 @@ def evaluate(LLM_name,language,translation_model_name,evlauationLLM):
 
 
     #Save the data
-    data_result.to_csv(os.path.join("Results",language[:3]+"_"+LLM_name+"_"+translation_model_name+"_evaluation.csv"), index=False)            
-        
-
-
-
-if __name__ == "__main__":
-    for language in language_list:
-        translation_pipeline(data_original, translation_model, language,cut_off=0)
-        answer_pipeline(LLM,language,translation_model)
-        evaluate(LLM,language,translation_model,LLM)
-
-
-
+    data_result.to_csv(os.path.join("Results",language[:3]+"_"+LLM_name+"_"+translation_model_name+"_evaluation.csv"), index=False)  

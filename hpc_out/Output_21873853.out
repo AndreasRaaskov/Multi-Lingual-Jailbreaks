@@ -1,0 +1,6 @@
+2024-05-28 17:01:15,949 | INFO | fairseq.tasks.text_to_speech | Please install tensorboardX: pip install tensorboardX
+Allocated memory: 0.00 GB
+Model alocated: 0.00 GB
+Tokens made
+Tokens alocated memory: 0.00 GB
+Cached memory: 0.00 GB
