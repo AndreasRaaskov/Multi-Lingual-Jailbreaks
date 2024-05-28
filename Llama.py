@@ -3,7 +3,9 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import numpy as np
 
-def GPT_answer(message: str, model_name="openchat/openchat_3.5") -> tuple:
+
+
+def GPT_answer(message: str, model_name=r"/dtu/blackhole/01/138401/Meta-Llama-3-8B") -> tuple:
     # Load tokenizer and model
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     print("Tokenizer loaded")

@@ -7,7 +7,7 @@ import os
 
 language_list = ["dan_Latn"]
 
-translation_model = "nllb600M"
+translation_model = "nllb1.3B"
 
 LLM = "openchat/openchat_3.5"
 
@@ -40,7 +40,7 @@ def translation_pipeline(data, model_name, language,round_trip=True):
     batch_size=100
     temp_list = []
     for i in range(0, len(q_list), batch_size):
-        temp_list.append(model.translate(q_list[i:i + batch_size], source_language, target_language))
+        temp_list.extend(model.translate(q_list[i:i + batch_size], source_language, target_language))
     data.loc[:,"Question translation"] = temp_list
     
     #define the laser encoder
