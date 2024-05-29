@@ -9,13 +9,13 @@ import ChatGPT
 import Llama
 
 # Danish Hindi and Vietnamese 
-language_list = ["hin_Deva","dan_latn"] #,"ban_Latn","dan_latn"]
+language_list = ["dan_Latn","ban_Latn","hin_Deva","vie_Latn","por_Latn","tha_Thai","zul_Latn","zho_Hans","glg_Latn","arb_Arab"]
 
-translation_model = "nllb1.3B"
+translation_model = "nllb3.3B"
 
-LLM = "/dtu/blackhole/01/138401/Meta-Llama-3-8B"
+LLM = "Llama"
 # Get the do not answer dataset
-data_original = get_do_not_answer_dataset()[:10]
+data_original = get_do_not_answer_dataset()
 
 
 def translation_pipeline(data, model_name, language,round_trip=True,cut_off=0):
@@ -76,7 +76,7 @@ def translation_pipeline(data, model_name, language,round_trip=True,cut_off=0):
         keep = data.loc[(data["cosine back"] > cut_off)].index
         data = data.loc[keep,:]
 
-    
+
     #Save the data
     data.to_csv(os.path.join("translations",language[:3]+"_"+model_name+".csv"), index=False)
 
@@ -90,8 +90,8 @@ def answer_pipeline(LLM_name,language,translation_model):
     # Define the model
     if LLM_name[:3] == "gpt":
         model = ChatGPT.GPT(LLM_name)
-    else:
-        model = Llama.AutoModel(LLM_name)
+    elif LLM_name=="Llama":
+        model = Llama.AutoModel("/dtu/blackhole/01/138401/Meta-Llama-3-8B") #ToDo find more elegant way than hardcode path
     
 
     #Loop through the questions and get the answers
@@ -122,11 +122,6 @@ def evaluate(LLM_name,language,translation_model_name,evlauationLLM):
 
     data_original = get_do_not_answer_dataset().loc[ids,["id","risk_area","types_of_harm","specific_harms","question"]]
             
-    # Define the model
-    if LLM_name[:3] == "gpt":
-        model = ChatGPT.GPT(LLM_name)
-    else:
-        model = Llama.AutoModel(LLM_name)
     
     #Define the translation model
     if translation_model_name[:4] == "nllb":
@@ -151,6 +146,15 @@ def evaluate(LLM_name,language,translation_model_name,evlauationLLM):
     english_answer = []
     for i in range(0, len(q_list), batch_size):
         english_answer.extend(translation_model.translate(q_list[i:i + batch_size], target_language, source_language))
+
+    del translation_model # Delete the model to free up space.
+
+
+    # Define the model
+    if LLM_name[:3] == "gpt":
+        eval_model = ChatGPT.GPT(LLM_name)
+    elif LLM_name=="Llama":
+        eval_model = Llama.AutoModel("/dtu/blackhole/01/138401/Meta-Llama-3-8B") #ToDo find more elegant way than hardcode path
 
     evaluations= []
     explanations = []
@@ -195,9 +199,13 @@ def evaluate(LLM_name,language,translation_model_name,evlauationLLM):
 
 if __name__ == "__main__":
     for language in language_list:
+        print(language)
         translation_pipeline(data_original, translation_model, language,cut_off=0)
+        print("translation completed")
         answer_pipeline(LLM,language,translation_model)
+        print("answer completed")
         evaluate(LLM,language,translation_model,LLM)
+        print("evaluation completed")
 
 
 

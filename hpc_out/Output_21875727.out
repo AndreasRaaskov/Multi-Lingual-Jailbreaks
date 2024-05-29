@@ -1,0 +1,11 @@
+2024-05-29 07:51:05,854 | INFO | fairseq.tasks.text_to_speech | Please install tensorboardX: pip install tensorboardX
+dan_Latn
+2024-05-29 07:53:15,589 | INFO | laser_encoders.download_models |  - laser2.spm already downloaded
+2024-05-29 07:53:15,670 | INFO | laser_encoders.download_models |  - laser2.pt already downloaded
+2024-05-29 07:53:15,670 | INFO | laser_encoders.download_models |  - laser2.spm already downloaded
+2024-05-29 07:53:15,671 | INFO | laser_encoders.download_models |  - laser2.cvocab already downloaded
+2024-05-29 07:53:16,708 | INFO | laser_encoders.download_models |  - laser2.spm already downloaded
+2024-05-29 07:53:16,785 | INFO | laser_encoders.download_models |  - laser2.pt already downloaded
+2024-05-29 07:53:16,785 | INFO | laser_encoders.download_models |  - laser2.spm already downloaded
+2024-05-29 07:53:16,785 | INFO | laser_encoders.download_models |  - laser2.cvocab already downloaded
+translation completed

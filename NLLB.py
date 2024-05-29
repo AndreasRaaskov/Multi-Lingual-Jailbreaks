@@ -54,7 +54,6 @@ class nllb_translator:
         #Check if GPU is available
 
         # Set environment variable to make only GPU 1 visible to this script
-        os.environ["CUDA_VISIBLE_DEVICES"] = "2"
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
         #Load the model
@@ -63,7 +62,6 @@ class nllb_translator:
         self.tokenizer = AutoTokenizer.from_pretrained(os.path.join(model_folder,model_name))
 
         #Move the model to the device
-        print(f"Allocated memory: {torch.cuda.memory_allocated(self.device) / 1e9:.2f} GB")
         self.model.to(self.device)
         self.model.eval()
         
@@ -72,11 +70,8 @@ class nllb_translator:
     def translate(self,texts,source_language,target_language) -> list[str] | str | str: 
         with torch.no_grad(): 
             #Tokenize the texts and add it to device. 
-            print(f"Model alocated: {torch.cuda.memory_allocated(self.device) / 1e9:.2f} GB")
+            
             inputs = self.tokenizer(texts, return_tensors="pt", padding = True).to(self.device)
-            print("Tokens made")
-            print(f"Tokens alocated memory: {torch.cuda.memory_allocated(self.device) / 1e9:.2f} GB")
-            print(f"Cached memory: {torch.cuda.memory_reserved(self.device) / 1e9:.2f} GB")
             #Translate tokens on device and make a tokenized output that is sent to cpu
             translated_tokens = self.model.generate(**inputs, forced_bos_token_id=self.tokenizer.lang_code_to_id[target_language]).to("cpu")
 

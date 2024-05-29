@@ -1,0 +1,13 @@
+2024-05-28 23:42:06,252 | INFO | fairseq.tasks.text_to_speech | Please install tensorboardX: pip install tensorboardX
+2024-05-28 23:43:53,948 | INFO | laser_encoders.download_models |  - laser2.spm already downloaded
+2024-05-28 23:43:54,016 | INFO | laser_encoders.download_models |  - laser2.pt already downloaded
+2024-05-28 23:43:54,016 | INFO | laser_encoders.download_models |  - laser2.spm already downloaded
+2024-05-28 23:43:54,017 | INFO | laser_encoders.download_models |  - laser2.cvocab already downloaded
+2024-05-28 23:43:54,919 | INFO | laser_encoders.download_models |  - laser2.spm already downloaded
+2024-05-28 23:43:54,983 | INFO | laser_encoders.download_models |  - laser2.pt already downloaded
+2024-05-28 23:43:54,983 | INFO | laser_encoders.download_models |  - laser2.spm already downloaded
+2024-05-28 23:43:54,983 | INFO | laser_encoders.download_models |  - laser2.cvocab already downloaded
+1
+cuda
+1
+cuda

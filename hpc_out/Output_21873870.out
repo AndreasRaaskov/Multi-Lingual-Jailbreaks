@@ -1,0 +1,28 @@
+2024-05-28 19:09:32,619 | INFO | fairseq.tasks.text_to_speech | Please install tensorboardX: pip install tensorboardX
+Allocated memory: 0.00 GB
+Model alocated: 0.00 GB
+Tokens made
+Tokens alocated memory: 0.00 GB
+Cached memory: 0.00 GB
+Model alocated: 0.00 GB
+Tokens made
+Tokens alocated memory: 0.00 GB
+Cached memory: 0.00 GB
+2024-05-28 19:10:03,415 | INFO | laser_encoders.download_models |  - laser2.spm already downloaded
+2024-05-28 19:10:03,498 | INFO | laser_encoders.download_models |  - laser3-hin_Deva.v1.pt already downloaded
+2024-05-28 19:10:03,498 | INFO | laser_encoders.download_models |  - laser2.spm already downloaded
+2024-05-28 19:10:03,498 | INFO | laser_encoders.download_models |  - laser2.cvocab already downloaded
+2024-05-28 19:10:09,919 | INFO | laser_encoders.download_models |  - laser2.spm already downloaded
+2024-05-28 19:10:09,983 | INFO | laser_encoders.download_models |  - laser2.pt already downloaded
+2024-05-28 19:10:09,984 | INFO | laser_encoders.download_models |  - laser2.spm already downloaded
+2024-05-28 19:10:09,984 | INFO | laser_encoders.download_models |  - laser2.cvocab already downloaded
+Model alocated: 0.00 GB
+Tokens made
+Tokens alocated memory: 0.00 GB
+Cached memory: 0.00 GB
+Model alocated: 0.00 GB
+Tokens made
+Tokens alocated memory: 0.00 GB
+Cached memory: 0.00 GB
+1
+cuda
