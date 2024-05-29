@@ -18,7 +18,7 @@ class AutoModel():
 
         # Generate response using the model with log probability calculation
         with torch.no_grad():
-            outputs = self.model.generate(inputs, max_length=50,output_logits=True,low_memory = True, return_dict_in_generate=True)
+            outputs = self.model.generate(inputs, max_length=50,output_logits=True,pad_token_id=self.tokenizer.eos_token_id, return_dict_in_generate=True)
 
 
         log_probs = []
