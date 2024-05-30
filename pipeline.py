@@ -9,8 +9,8 @@ import ChatGPT
 import concurrent.futures
 
 # Danish Hindi and Vietnamese 
-language_list = ["por_Latn","hat_Latn","zul_Latn"] #"por_Latn","hat_Latn","zul_Latn","tha_Thai",
-language_code = ["pt","ht","zu"]
+language_list = ["dan_latn"] #"por_Latn","hat_Latn","zul_Latn","tha_Thai",
+language_code = ["dan"]
 translation_model = "Google"
 
 LLM = "gpt-4-turbo-2024-04-09"
@@ -170,7 +170,7 @@ def evaluate(LLM_name,language,translation_model_name,evlauationLLM):
 
     #Translate the answers back to english
     q_list=list(data_back["answers"])
-    batch_size=3
+    batch_size=2
     english_answer = []
     for i in range(0, len(q_list), batch_size):
         english_answer.extend(translation_model.translate(q_list[i:i + batch_size], target_language, source_language))
