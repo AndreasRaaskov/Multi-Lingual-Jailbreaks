@@ -9,8 +9,8 @@ import ChatGPT
 import concurrent.futures
 
 # Danish Hindi and Vietnamese 
-language_list = ["tha_Thai"] #"por_Latn","hat_Latn","zul_Latn","tha_Thai",
-language_code = ["th"]
+language_list = ["por_Latn","hat_Latn","zul_Latn"] #"por_Latn","hat_Latn","zul_Latn","tha_Thai",
+language_code = ["pt","ht","zu"]
 translation_model = "Google"
 
 LLM = "gpt-4-turbo-2024-04-09"
@@ -233,7 +233,7 @@ def evaluate(LLM_name,language,translation_model_name,evlauationLLM):
 if __name__ == "__main__":
     for language in language_list:
         #translation_pipeline(data_original, translation_model, language,cut_off=0)
-        answer_pipeline(LLM,language,translation_model)
+        #answer_pipeline(LLM,language,translation_model)
         evaluate(LLM,language,translation_model,"gpt-3.5-turbo-0301")
 
 
