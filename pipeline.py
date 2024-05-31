@@ -10,7 +10,7 @@ import concurrent.futures
 
 # Danish Hindi and Vietnamese 
 language_list = ["dan_latn"] #"por_Latn","hat_Latn","zul_Latn","tha_Thai",
-language_code = ["dan"]
+language_code = ["da"]
 translation_model = "Google"
 
 LLM = "gpt-4-turbo-2024-04-09"
