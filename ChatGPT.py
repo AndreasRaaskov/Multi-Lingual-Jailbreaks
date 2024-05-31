@@ -45,27 +45,16 @@ class GPT:
 
         return answer,perplexity,probs
     
-    def evaluate(self,messages):
+    def evaluate(self,message):
 
         output=openai.chat.completions.create(
-                model=self.MODEL_ID, messages=messages,
-                logprobs=True,
+                model=self.MODEL_ID, messages=[{"role": "user", "content": message}],
                 temperature=0.0,
-                max_tokens=200
             )
-        tokens = []
-        logprobs = []
-        for item in output.choices[0].logprobs.content:
-            tokens.append(item.token)
-            logprobs.append(item.logprob)
+
 
         answer = output.choices[0].message.content
 
-        #probability calculation
-        probs = []
-        for token,p in zip(tokens,np.exp(logprobs)):
-            probs.append((token,p))
-
-        return answer,probs
+        return answer
 
 
