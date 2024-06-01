@@ -231,10 +231,11 @@ def evaluate(LLM_name,language,translation_model_name,evlauationLLM):
 
 
 if __name__ == "__main__":
-    for language in language_list:
+    answer_pipeline(LLM,"eng","original")
+    #for language in language_list:
         #translation_pipeline(data_original, translation_model, language,cut_off=0)
         #answer_pipeline(LLM,language,translation_model)
-        evaluate(LLM,language,translation_model,"gpt-3.5-turbo-0301")
+        #evaluate(LLM,language,translation_model,"gpt-3.5-turbo-0301")
 
 
 

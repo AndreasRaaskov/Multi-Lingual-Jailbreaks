@@ -133,7 +133,8 @@ def evaluate(load_path:str, save_path:str):
 
 
 if __name__ == "__main__":
-    for lan in ["vie"]:
-        load_path = f"Results\{lan}_gpt-4-turbo-2024-04-09_Google_evaluation.csv"
+
+    for lan in ["eng"]:
+        load_path = f"Results\{lan}_gpt-4-turbo-2024-04-09_original_evaluation.csv"
         save_path = f"results_labled\{lan}_gpt-4_auto_labled.csv"
         evaluate(load_path, save_path)
