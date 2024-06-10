@@ -132,6 +132,50 @@ def answer_pipeline(LLM_name,language,translation_model):
     #Save the data
     data.to_csv(os.path.join("Results",language[:3]+"_"+LLM_name+"_"+translation_model+".csv"), index=False)
     
+def translate_back(LLM_name,language,translation_model_name,):
+     # a function that evaluates the results using an LLM
+
+    data = pd.read_csv(os.path.join("Results",language[:3]+"_"+LLM_name+"_"+translation_model_name+".csv"))
+            
+    # Define the model
+    if LLM_name[:3] == "gpt":
+        eval_model = ChatGPT.GPT(LLM_name)
+    elif LLM_name[:3] == "ope":
+        pass #Not implemented
+    elif LLM_name[:3] == "Lla":
+        pass #Not implemented
+    else:
+        raise ValueError("Model name not recognized")
+    
+    #Define the translation model
+    if translation_model_name[:4] == "nllb":
+        translation_model = NLLB.nllb_translator(translation_model_name)
+
+        #NLLB needs the language code be in Meta language format
+        target_language = language
+        source_language = "eng_Latn"
+
+    elif translation_model_name == "Google":
+        translation_model = GoogleTranslate.GoogleTranslate()
+
+        #Google translate needs the language code to be in the format two first letters
+        target_language = language_code[language_list.index(language)]
+        source_language = "en"
+        
+    
+
+    #Translate the answers back to english
+    q_list=list(data["answers"])
+    batch_size=2
+    english_answer = []
+    for i in range(0, len(q_list), batch_size):
+        english_answer.extend(translation_model.translate(q_list[i:i + batch_size], target_language, source_language))
+
+    data.loc[:,"english_answer"] = english_answer
+
+    #Save the data
+    data.to_csv(os.path.join("Results",language[:3]+"_"+LLM_name+"_"+translation_model_name+"_translated_back.csv"), index=False)
+
 def evaluate(LLM_name,language,translation_model_name,evlauationLLM):
     # a function that evaluates the results using an LLM
 
