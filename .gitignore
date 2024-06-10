@@ -156,3 +156,4 @@ LLMs/
 TranslationModels/
 do_not_answer_dataset/
 keys.env
+hpc_out/
