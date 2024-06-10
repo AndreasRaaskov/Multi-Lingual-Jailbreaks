@@ -1,9 +1,9 @@
 #!/bin/sh 
 ### Script for running dtu HPC
 ### -- specify queue -- 
-#BSUB -q gpuv100
+#BSUB -q gpua100
 ### -- set the job Name -- 
-#BSUB -J "LlamaOnIce"
+#BSUB -J "LlamaOnFaster"
 ### -- Select the resources: 1 gpu in exclusive process mode --
 #BSUB -gpu "num=1:mode=exclusive_process"
 ### -- ask for number of cores (default: 1) -- 
@@ -15,7 +15,7 @@
 ### -- specify that we want the job to get killed if it exceeds 5 GB per core/slot -- 
 #BSUB -M 5GB
 ### -- set walltime limit: hh:mm -- 
-#BSUB -W 12:30 
+#BSUB -W 12:00 
 ### -- set the email address -- 
 #BSUB -u s183901@dtu.dk
 ### -- send notification at start -- 
