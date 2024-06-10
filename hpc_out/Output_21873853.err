@@ -1,0 +1,10 @@
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:04<00:04,  4.55s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.24s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.58s/it]
+the `lang_code_to_id` attribute is deprecated. The logic is natively handled in the `tokenizer.adder_tokens_decoder` this attribute will be removed in `transformers` v4.38
+Traceback (most recent call last):
+  File "/zhome/0a/b/138401/Desktop/Apart/Multi-Lingual-Jailbreaks/pipeline.py", line 200, in <module>
+    translation_pipeline(data_original, translation_model, language,cut_off=0)
+  File "/zhome/0a/b/138401/Desktop/Apart/Multi-Lingual-Jailbreaks/pipeline.py", line 48, in translation_pipeline
+    temp_list.extend(model.translate(q_list[i:i + batch_size], source_language, target_language))
+  File "/zhome/0a/b/138401/Desktop/Apart/Multi-Lingual-Jailbreaks/NLLB.py", line 81, in translate
+    translated_tokens = self.model.generate(**inputs, forced_bos_token_id=self.tokenizer.lang_code_to_id[target_language]).to("cpu")
+KeyError: 'dan_latn'

@@ -1,13 +1,11 @@
 
 import openai
-import dotenv
 import numpy as np
 import concurrent.futures
 #MODEL_ID = "gpt-3.5-turbo-0301"
 #MODEL_ID = "gpt-4-0613"
 
-keys = dotenv.dotenv_values("keys.env")
-openai.api_key = keys["OPENAI_API_KEY"]
+
 
 
 
@@ -15,6 +13,9 @@ openai.api_key = keys["OPENAI_API_KEY"]
 
 class GPT:
     def __init__(self, MODEL_ID):
+        import dotenv
+        keys = dotenv.dotenv_values("keys.env")
+        openai.api_key = keys["OPENAI_API_KEY"]
         self.MODEL_ID = MODEL_ID
         
 
